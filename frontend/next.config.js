@@ -1,39 +1,54 @@
 module.exports = {
-    // Enabling React Strict Mode
+    // Enable React Strict Mode (recommended for development)
     reactStrictMode: true,
   
     // Custom Webpack configuration
-    webpack: (config, { isServer }) => {
-      // Example of adding custom Webpack loaders, plugins, etc.
+    webpack(config, { isServer }) {
+      // Example: Add custom Webpack settings if needed
+      // You can also conditionally apply config settings based on whether it's a server-side or client-side build
       if (!isServer) {
-        // Add polyfills or other client-side only libraries here
+        // Client-side only settings can go here (e.g., polyfills)
       }
       return config;
     },
   
-    // Environment variables can be added here for both frontend and backend usage
+    // Environment variables for both client and server-side
     env: {
-      NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL, // public API URL
-      NEXT_PUBLIC_JWT_SECRET: process.env.NEXT_PUBLIC_JWT_SECRET, // public JWT secret (for client-side usage)
+      NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL, // Accessible on both client and server
+      NEXT_PUBLIC_JWT_SECRET: process.env.NEXT_PUBLIC_JWT_SECRET, // Exposed to client-side code
     },
   
-    // Next.js Image Optimization configuration
+    // Image optimization configuration (optional)
     images: {
-      domains: ['example.com', 'cdn.example.com'], // Add domains if you're using external images
+      domains: ['example.com', 'cdn.example.com'], // Add external image domains if needed
     },
   
-    // Redirects, rewrites, or custom headers can be added here
+    // Redirects configuration (optional)
     async redirects() {
       return [
         {
           source: '/old-route',
           destination: '/new-route',
-          permanent: true,
+          permanent: true, // 301 redirect (permanent)
         },
       ];
     },
   
-    // Custom build directory
-    distDir: 'build', // Optional: Change build output directory if you wish
+    // Rewrites configuration (optional, for API routing, etc.)
+    async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: 'http://localhost:5000/api/:path*', // Example API proxy
+        },
+      ];
+    },
+  
+    // Custom build output directory (optional)
+    distDir: 'build', // Custom build output directory (default is .next)
+  
+    // Additional configuration for static export (optional)
+    // Uncomment this if you're using `next export` to generate a static site
+    // exportTrailingSlash: true,
   };
   
